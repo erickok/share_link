@@ -1,0 +1,19 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="nl.u2312.share_link">
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="text/plain" />
+        </intent>
+    </queries>
+
+    <application>
+        <!-- This manifest declared broadcast receiver allows us to use an explicit
+             Intent and be informed of the user's choice -->
+        <receiver android:name=".ShareLinkResultHandler" android:exported="false">
+            <intent-filter>
+                <action android:name="EXTRA_CHOSEN_COMPONENT" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

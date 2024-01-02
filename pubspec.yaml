@@ -1,0 +1,32 @@
+name: share_link
+description: Share links with target-specific content (such as utm tags) and user selection feedback
+version: 0.1.0
+homepage: https://github.com/erickok/share_link
+
+environment:
+  sdk: '>=2.17.0 <4.0.0'
+  flutter: ">=2.5.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: nl.u2312.share_link
+        pluginClass: ShareLinkPlugin
+      ios:
+        pluginClass: ShareLinkPlugin
+      web:
+        pluginClass: ShareLinkPlugin
+        fileName: share_link_web.dart
