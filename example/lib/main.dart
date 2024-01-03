@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_link/share_link.dart';
 import 'package:share_link/share_result.dart';
+import 'package:share_link_example/widget_bounds.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,13 +39,19 @@ class _ShareButtonState extends State<ShareButton> {
 
   @override
   Widget build(BuildContext context) {
+    final shareButtonKey = GlobalKey();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         ElevatedButton(
+          key: shareButtonKey,
           child: const Text('Share https://2312.nl'),
           onPressed: () async {
-            final result = await ShareLink.shareUri(Uri.parse('https://2312.nl'), subject: '2312.nl website');
+            final result = await ShareLink.shareUri(
+              Uri.parse('https://2312.nl'),
+              subject: '2312.nl website',
+              shareOrigin: shareButtonKey.absolutePositionBounds,
+            );
             setState(() {
               _shareResult = result;
             });

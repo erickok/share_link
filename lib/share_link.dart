@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:share_link/share_result.dart';
 
 import 'share_link_platform_interface.dart';
@@ -10,7 +12,10 @@ class ShareLink {
   /// A preview is shown on iOS and Android versions 10 and up.
   ///
   /// The [subject] is only used when sharing via email.
-  static Future<ShareResult> shareUri(Uri uri, {String? subject}) {
-    return ShareLinkPlatform.instance.shareUri(uri, subject: subject);
+  ///
+  /// The [shareOrigin] is only used (and required) on iPhone and iPad and is
+  /// used to position the share.
+  static Future<ShareResult> shareUri(Uri uri, {String? subject, Rect? shareOrigin}) {
+    return ShareLinkPlatform.instance.shareUri(uri, subject: subject, shareOrigin: shareOrigin);
   }
 }

@@ -27,6 +27,8 @@ flutter:
         pluginClass: ShareLinkPlugin
       ios:
         pluginClass: ShareLinkPlugin
+      macos:
+        pluginClass: ShareLinkPlugin
       web:
         pluginClass: ShareLinkPlugin
         fileName: share_link_web.dart

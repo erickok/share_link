@@ -10,7 +10,7 @@ After a link was shared by the user (or not), this library provides feedback of 
 
 ### Android
 
-On Android an `IntentChooser` is used to share the link. Target-specific links with source/medium are supported for several well-known applications, with a fallback based on the target app's package name. 
+On Android an `IntentChooser` is used to share the link. This presents the OS-standard sharing bottom sheet. Target-specific links with source/medium are supported for several well-known applications, with a fallback based on the target app's package name. 
 
 ![Sharing on Android](https://raw.githubusercontent.com/erickok/share_link/master/share_link_android.png)
 
@@ -18,9 +18,19 @@ On Android 10 (API level 29) and later the share targets might show up multiple 
 
 ### iOS
 
-On iOS an `UIActivityViewController` is used to share the link. Target-specific links with source/medium are supported for several well-known applications, with a fallback based on the target app's bundle identifier.
+On iOS an `UIActivityViewController` is used to share the link. This presents the sharing bottom sheet (iPhone) or popover (iPad). Target-specific links with source/medium are supported for several well-known applications, with a fallback based on the target app's bundle identifier.
 
 ![Sharing on iOS](https://raw.githubusercontent.com/erickok/share_link/master/share_link_ios.png)
+
+The `shareOrigin` parameter is ignored on iPhone and required on iPad, for correct placement of the popover. See the example app for a demonstration and helper method.
+
+### MacOS
+
+On MacOS an `NSSharingServicePicker` is used to share the link. This presents a popover menu with available services. Target-specific links are unsupported, but the user-chosen app is still reported back.
+
+![Sharing on iOS](https://raw.githubusercontent.com/erickok/share_link/master/share_link_macos.png)
+
+To ensure the popover is placed correctly, you are required to set the `shareOrigin` parameter.
 
 ### Web
 

@@ -3,6 +3,7 @@
 // package as the core of your plugin.
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html show window;
+import 'dart:ui';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:share_link/share_result.dart';
@@ -24,8 +25,10 @@ class ShareLinkPlugin extends ShareLinkPlatform {
   ///
   /// No UTM tracking parameters are added to the [uri] when sharing via the
   /// Web Share API, as it provides no info on the selected sharing target.
+  ///
+  /// The [shareOrigin] is unused on web.
   @override
-  Future<ShareResult> shareUri(Uri uri, {String? subject}) async {
+  Future<ShareResult> shareUri(Uri uri, {String? subject, Rect? shareOrigin}) async {
     final navigator = html.window.navigator;
     try {
       // Attempt to use the Web Share API

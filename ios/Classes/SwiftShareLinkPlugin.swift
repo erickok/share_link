@@ -35,6 +35,15 @@ public class SwiftShareLinkPlugin: NSObject, FlutterPlugin {
           ac.setValue(subject, forKey: "subject")
       }
       
+      // Set up popover source for iPad
+      if let ppc = ac.popoverPresentationController {
+          guard let x = args?["shareOriginX"] as? Double, let y = args?["shareOriginY"] as? Double, let w = args?["shareOriginW"] as? Double, let h = args?["shareOriginH"] as? Double else {
+              return result(FlutterError(code: "error", message: "Sharing on iPad required [shareOrigin] to be set", details: nil))
+          }
+          ppc.sourceView = rootViewController.view
+          ppc.sourceRect = CGRect(x: x, y: y, width: w, height: h)
+      }
+      
       // Set up callback to report the chosen target
       ac.completionWithItemsHandler = { (activityType, completed, returnedItems, error) in
           if let activityType = activityType {
