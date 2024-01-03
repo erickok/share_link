@@ -10,14 +10,17 @@ After a link was shared by the user (or not), this library provides feedback of 
 
 ### Android
 
-**TODO** explanation
-**TODO** screenshot
+On Android an `IntentChooser` is used to share the link. Target-specific links with source/medium are supported for several well-known applications, with a fallback based on the target app's package name. 
+
+![Sharing on Android](https://raw.githubusercontent.com/erickok/share_link/master/share_link_android.png)
+
+On Android 10 (API level 29) and later the share targets might show up multiple times in the share sheet, due to platform limitations.
 
 ### iOS
 
-On iOS an `UIActivityViewController` is used to share the link. 
-**TODO** explanation
-**TODO** screenshot
+On iOS an `UIActivityViewController` is used to share the link. Target-specific links with source/medium are supported for several well-known applications, with a fallback based on the target app's bundle identifier.
+
+![Sharing on iOS](https://raw.githubusercontent.com/erickok/share_link/master/share_link_ios.png)
 
 ### Web
 
@@ -41,6 +44,8 @@ final result = await LinkShare().shareUri(Uri.parse("https://some_link"));
 ```
 
 ## Limitations
+
+Platform restrictions apply, especially on Android. Feedback on the chosen app is only available since API level 22 (Android 5). On API level 29 (Android 10) and later the share sheet may contain duplicate share targets.
 
 Sharing of files, images or general text is unsupported. This use-case is already greatly covered by the official, community-supported [share_plus](https://pub.dev/packages/share_plus) package.
 

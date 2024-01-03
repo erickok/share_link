@@ -41,7 +41,7 @@ class ShareLinkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginR
         ShareLinkResultHandler.lastTarget = null
 
         // First figure out the apps that support sharing
-        val baseShareIntent = Intent(Intent.ACTION_SEND).apply {
+        val queryShareIntent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, uri)
             if (subject != null) {
@@ -52,19 +52,8 @@ class ShareLinkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginR
         val pm = engineContext.packageManager
 
         @Suppress("DEPRECATION") // New API isn't used so keep deprecated call
-        val targets = pm.queryIntentActivities(baseShareIntent, 0)
+        val targets = pm.queryIntentActivities(queryShareIntent, 0)
         val expectActivityResult = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
-
-        if (attachedActivity == null || !expectActivityResult) {
-            // No activity attached any more or unsupported on this platform, so no feedback is possible
-            engineContext.startActivity(Intent.createChooser(baseShareIntent, null).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            })
-            // Always assume success in sharing
-            lastShareRequest = null
-            result.success(mapOf("success" to true, "uri" to uri))
-            return
-        }
 
         // For each target, create its own share intent with utm_source and utm_medium parameters
         // and create a chooser intent with all of them
@@ -84,13 +73,42 @@ class ShareLinkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginR
             }
             targetIntent
         }
-        val shareComponents = shareIntents.map { it.component }.toTypedArray()
 
+        // A base share intent is required to be able to show the chooser
+        // Prefer to use GSM ('copy link') so we can 'override' all others via EXTRA_ALTERNATE_INTENTS
+        val hasGmsTarget = targets.any { it.activityInfo.packageName == "com.google.android.gms" }
+        val chooserBaseIntent =
+            if (hasGmsTarget) queryShareIntent.apply { setPackage("com.google.android.gms") }
+            else shareIntents.first()
+        val chooserInitialIntents =
+            if (hasGmsTarget) shareIntents.filterNot { it.`package` == "com.google.android.gms" }
+            else shareIntents.filterNot { it == chooserBaseIntent }
+
+        if (attachedActivity == null || !expectActivityResult) {
+            // No activity attached any more or unsupported on this platform, so no feedback is possible
+            val chooserIntent = Intent.createChooser(
+                chooserBaseIntent,
+                null
+            ).apply {
+                // These contain the links with utm_source and utm_medium parameters and will be put in front
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    putExtra(Intent.EXTRA_ALTERNATE_INTENTS, shareIntents.toTypedArray())
+                } else {
+                    putExtra(Intent.EXTRA_INITIAL_INTENTS, chooserInitialIntents.toTypedArray())
+                }
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            engineContext.startActivity(chooserIntent)
+            // Always assume success in sharing
+            lastShareRequest = null
+            result.success(mapOf("success" to true, "uri" to uri))
+            return
+        }
+
+        // Chooser with IntentSender to handle the feedback
         val chooserIntent =
             Intent.createChooser(
-                baseShareIntent.apply {
-                    putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, shareComponents)
-                },
+                chooserBaseIntent,
                 null,
                 PendingIntent.getBroadcast(
                     engineContext,
@@ -103,12 +121,16 @@ class ShareLinkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginR
                     }
                 ).intentSender
             ).apply {
-                putExtra(Intent.EXTRA_ALTERNATE_INTENTS, shareIntents.toTypedArray())
+                // These contain the links with utm_source and utm_medium parameters and will be put in front
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    putExtra(Intent.EXTRA_ALTERNATE_INTENTS, shareIntents.toTypedArray())
+                } else {
+                    putExtra(Intent.EXTRA_INITIAL_INTENTS, chooserInitialIntents.toTypedArray())
+                }
             }
 
         try {
             // Shown chooser; the result is send back after the user has chosen a target (or nothing)
-            ShareLinkResultHandler.lastUri = uri // Used as uri result when no app was selected
             attachedActivity!!.startActivityForResult(chooserIntent, ShareLinkResultHandler.ACTIVITY_RESULT_CODE)
         } catch (e: Exception) {
             lastShareRequest = null
@@ -138,7 +160,8 @@ class ShareLinkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginR
         request.success(
             mapOf(
                 "success" to true,
-                "uri" to if (lastTarget != null) UtmUriBuilder(Uri.parse(lastUri), lastTarget).build().toString() else lastUri,
+                "uri" to if (lastTarget != null) UtmUriBuilder(Uri.parse(lastUri), lastTarget).build()
+                    .toString() else lastUri,
                 "target" to lastTarget
             )
         )
