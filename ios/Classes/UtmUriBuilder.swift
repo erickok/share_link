@@ -21,7 +21,7 @@ struct UtmUriBuilder {
             utmSource = "mail"
             break
         case .postToTwitter:
-            utmSource = "twitter"
+            utmSource = "x"
             break
         case .postToFacebook:
             utmSource = "facebook"
@@ -30,12 +30,26 @@ struct UtmUriBuilder {
             utmSource = "sms"
             break
         default:
-            // TODO Test well-known apps and see what activityType they give (Facebook, X, ...)
-            if let dot = activityType.rawValue.lastIndex(of: ".") {
-                // Remove the prefix before the last dot
-                utmSource = String(activityType.rawValue[activityType.rawValue.index(after: dot)...])
-            } else {
-                utmSource = activityType.rawValue
+            switch activityType.rawValue {
+            case "net.whatsapp.WhatsApp.ShareExtension":
+                utmSource = "whatsapp"
+                break
+            case "com.burbn.instagram.shareextension":
+                utmSource = "instagram"
+                break
+            case "com.burbn.barcelona.ShareExtension":
+                utmSource = "threads"
+                break
+            case "org.mozilla.ios.Focus.ShareTo", "org.mozilla.ios.Firefox.ShareTo":
+                utmSource = "firefox"
+                break
+            default:
+                if let dot = activityType.rawValue.lastIndex(of: ".") {
+                    // Remove the prefix before the last dot
+                    utmSource = String(activityType.rawValue[activityType.rawValue.index(after: dot)...])
+                } else {
+                    utmSource = activityType.rawValue
+                }
             }
         }
         let utmMedium: String
@@ -44,7 +58,13 @@ struct UtmUriBuilder {
             utmMedium = "email"
             break
         default:
-            utmMedium = "social"
+            switch activityType.rawValue {
+            case "org.mozilla.ios.Focus.ShareTo", "org.mozilla.ios.Firefox.ShareTo":
+                utmMedium = "web"
+                break
+            default:
+                utmMedium = "social"
+            }
         }
         let utmItems = [
             URLQueryItem(name: "utm_source", value: utmSource),

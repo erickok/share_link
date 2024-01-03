@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'share_link'
-  s.version          = '0.1.1'
+  s.version          = '0.2.0'
   s.summary          = 'Share links with UTM targeting parameters'
   s.description      = <<-DESC
 Share links with UTM targeting parameters and feedback on the user-selected app.
