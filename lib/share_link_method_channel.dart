@@ -11,7 +11,8 @@ class MethodChannelShareLink extends ShareLinkPlatform {
   /// Shares a [uri] via a method channel which opens the platform-specific
   /// interface.
   @override
-  Future<ShareResult> shareUri(Uri uri, {String? subject, Rect? shareOrigin}) async {
+  Future<ShareResult> shareUri(Uri uri,
+      {String? subject, Rect? shareOrigin}) async {
     final result = (await methodChannel.invokeMethod<Map<dynamic, dynamic>>(
       'shareUri',
       {

@@ -15,7 +15,9 @@ class ShareLink {
   ///
   /// The [shareOrigin] is only used (and required) on iPhone and iPad and is
   /// used to position the share.
-  static Future<ShareResult> shareUri(Uri uri, {String? subject, Rect? shareOrigin}) {
-    return ShareLinkPlatform.instance.shareUri(uri, subject: subject, shareOrigin: shareOrigin);
+  static Future<ShareResult> shareUri(Uri uri,
+      {String? subject, Rect? shareOrigin}) {
+    return ShareLinkPlatform.instance
+        .shareUri(uri, subject: subject, shareOrigin: shareOrigin);
   }
 }
