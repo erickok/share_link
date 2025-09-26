@@ -17,10 +17,13 @@ class UtmUriBuilder(
             "org.telegram.messenger" -> "telegram"
             "org.thoughtcrime.securesms" -> "signal"
             "com.Slack" -> "slack"
+            "xyz.blueskyweb.app" -> "bluesky"
             "com.google.android.apps.messaging" -> "sms"
             "com.samsung.android.messaging" -> "sms"
             "com.google.android.gm" -> "mail"
             "com.samsung.android.email.provider" -> "mail"
+            "ch.protonmail.android" -> "mail"
+            "com.zoho.mail" -> "mail"
             else -> packageName.substringAfterLast(".")
         }
         val utmMedium = when (packageName) {
@@ -32,6 +35,8 @@ class UtmUriBuilder(
             "com.brave.browser" -> "web"
             "com.google.android.gm" -> "email"
             "com.microsoft.office.outlook" -> "email"
+            "ch.protonmail.android" -> "email"
+            "com.zoho.mail" -> "email"
             else -> "social"
         }
         return rawUri.buildUpon()

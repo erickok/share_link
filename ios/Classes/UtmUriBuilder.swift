@@ -40,8 +40,14 @@ struct UtmUriBuilder {
             case "com.burbn.barcelona.ShareExtension":
                 utmSource = "threads"
                 break
+            case "xyz.blueskyweb.app.Share-with-Bluesky":
+                utmSource = "bluesky"
+                break
             case "org.mozilla.ios.Focus.ShareTo", "org.mozilla.ios.Firefox.ShareTo":
                 utmSource = "firefox"
+                break
+            case "ch.protonmail.protonmail.Share", "com.zoho.zmail.ZohoMailShare":
+                utmSource = "mail"
                 break
             default:
                 if let dot = activityType.rawValue.lastIndex(of: ".") {
@@ -61,6 +67,9 @@ struct UtmUriBuilder {
             switch activityType.rawValue {
             case "org.mozilla.ios.Focus.ShareTo", "org.mozilla.ios.Firefox.ShareTo":
                 utmMedium = "web"
+                break
+            case "ch.protonmail.protonmail.Share", "com.zoho.zmail.ZohoMailShare":
+                utmMedium = "email"
                 break
             default:
                 utmMedium = "social"

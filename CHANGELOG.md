@@ -1,3 +1,8 @@
+## 0.3.0
+
+* Added extra mail and social known providers
+* Upgraded tooling for all platforms
+
 ## 0.2.0
 
 * Support for MacOS and iPad
