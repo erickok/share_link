@@ -42,7 +42,7 @@ Add to your pubspec.yaml file:
 
 ```yaml
 dependencies:
-  share_link: ^1.0.0
+  share_link: ^0.4.0
 ```
 
 Import the library and call `shareUri`:

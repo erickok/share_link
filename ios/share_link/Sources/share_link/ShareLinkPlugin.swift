@@ -1,10 +1,10 @@
 import Flutter
 import UIKit
 
-public class SwiftShareLinkPlugin: NSObject, FlutterPlugin {
+public class ShareLinkPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "share_link", binaryMessenger: registrar.messenger())
-    let instance = SwiftShareLinkPlugin()
+    let instance = ShareLinkPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

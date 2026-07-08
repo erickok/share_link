@@ -1,5 +1,4 @@
-import Foundation
-import os
+import UIKit
 
 class LinkToShare: NSObject, UIActivityItemSource {
     let link: URL

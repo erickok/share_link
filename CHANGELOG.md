@@ -1,3 +1,7 @@
+## 0.4.0
+
+* SPM support
+
 ## 0.3.0
 
 * Added extra mail and social known providers

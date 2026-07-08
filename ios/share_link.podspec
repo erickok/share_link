@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'share_link'
-  s.version          = '0.2.0'
+  s.version          = '0.4.0'
   s.summary          = 'Share links with UTM targeting parameters'
   s.description      = <<-DESC
 Share links with UTM targeting parameters and feedback on the user-selected app.
@@ -9,7 +9,7 @@ Share links with UTM targeting parameters and feedback on the user-selected app.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Eric Kok' => 'eric@2312.nl' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files     = 'share_link/Sources/share_link/**/*.swift'
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
 
