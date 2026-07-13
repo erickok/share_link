@@ -1,6 +1,6 @@
 name: share_link
 description: Share links with target-specific content (such as utm tags) and user selection feedback
-version: 0.4.0
+version: 0.5.0
 homepage: https://github.com/erickok/share_link
 
 environment:
