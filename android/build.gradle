@@ -10,9 +10,13 @@ allprojects {
 
 apply plugin: 'com.android.library'
 
+// AGP 9+ has built-in Kotlin support unless Flutter opts out via android.builtInKotlin=false.
 def agpMajor = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0] as int
-if (agpMajor < 9) {
-    // AGP < 9 still supports applying KGP; AGP 9+ requires Flutter built-in Kotlin.
+def builtInKotlin = providers.gradleProperty("android.builtInKotlin")
+        .map { it.toBoolean() }
+        .orElse(agpMajor >= 9)
+        .get()
+if (agpMajor < 9 || !builtInKotlin) {
     apply plugin: 'kotlin-android'
 }
 

@@ -1,3 +1,7 @@
+## 0.5.2
+
+* Fix Kotlin compilation when consumers opt out of built-in Kotlin (`android.builtInKotlin=false`) on AGP 9+
+
 ## 0.5.1
 
 * Fix for consumers using built-in Kotlin
