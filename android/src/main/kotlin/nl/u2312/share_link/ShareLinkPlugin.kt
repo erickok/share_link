@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -53,7 +52,6 @@ class ShareLinkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginR
 
         @Suppress("DEPRECATION") // New API isn't used so keep deprecated call
         val targets = pm.queryIntentActivities(queryShareIntent, 0)
-        val expectActivityResult = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
 
         // For each target, create its own share intent with utm_source and utm_medium parameters
         // and create a chooser intent with all of them
@@ -84,8 +82,8 @@ class ShareLinkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginR
             if (hasGmsTarget) shareIntents.filterNot { it.`package` == "com.google.android.gms" }
             else shareIntents.filterNot { it == chooserBaseIntent }
 
-        if (attachedActivity == null || !expectActivityResult) {
-            // No activity attached any more or unsupported on this platform, so no feedback is possible
+        if (attachedActivity == null) {
+            // No activity attached any more, so no feedback is possible
             val chooserIntent = Intent.createChooser(
                 chooserBaseIntent,
                 null
@@ -114,11 +112,7 @@ class ShareLinkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginR
                     engineContext,
                     0,
                     Intent(engineContext, ShareLinkResultHandler::class.java),
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        PendingIntent.FLAG_MUTABLE
-                    } else {
-                        0
-                    }
+                    PendingIntent.FLAG_MUTABLE
                 ).intentSender
             ).apply {
                 // These contain the links with utm_source and utm_medium parameters and will be put in front
@@ -147,9 +141,6 @@ class ShareLinkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PluginR
         val lastTarget = ShareLinkResultHandler.lastTarget?.substringBefore("/")
         lastShareRequest = null
 
-        Log.e("EKO", "lastTarget: $lastTarget")
-        Log.e("EKO", "lastUri: $lastUri")
-        Log.e("EKO", "resultCode: $resultCode")
         if (lastTarget == null && resultCode != Activity.RESULT_OK) {
             // Sharing was cancelled by the user
             request.success(mapOf("success" to false, "uri" to lastUri))

@@ -5,8 +5,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
 
 /**
  * Should be set on the PendingIntent.sendBroadcast(...) call. This receiver's
@@ -19,7 +17,6 @@ internal class ShareLinkResultHandler : BroadcastReceiver() {
         var lastUri: String? = null
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     override fun onReceive(context: Context?, intent: Intent) {
         val chosenComponent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT, ComponentName::class.java)
@@ -28,7 +25,6 @@ internal class ShareLinkResultHandler : BroadcastReceiver() {
             intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT)
         }
 
-        Log.e("EKO", "chosenComponent: $chosenComponent")
         lastTarget = chosenComponent?.flattenToString()
     }
 }

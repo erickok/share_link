@@ -1,3 +1,10 @@
+## 0.6.0
+
+* Updates the minimum supported SDK version to Flutter 3.44/Dart 3.12
+* Migrates to built-in Kotlin
+* Compiles the Android sources against Java 17
+* Raises the Android minSdkVersion to 24, matching Flutter's supported minimum
+
 ## 0.5.2
 
 * Fix Kotlin compilation when consumers opt out of built-in Kotlin (`android.builtInKotlin=false`) on AGP 9+
