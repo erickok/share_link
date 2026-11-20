@@ -11,11 +11,15 @@ let package = Package(
     products: [
         .library(name: "share-link", targets: ["share_link"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(name: "FlutterFramework", path: "../FlutterFramework")
+    ],
     targets: [
         .target(
             name: "share_link",
-            dependencies: [],
+            dependencies: [
+                .product(name: "FlutterFramework", package: "FlutterFramework")
+            ],
             resources: [
                 // If your plugin requires a privacy manifest, for example if it collects user
                 // data, update the PrivacyInfo.xcprivacy file to describe your plugin's

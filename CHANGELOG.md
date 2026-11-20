@@ -1,3 +1,9 @@
+## 0.7.0
+
+* Adds the `FlutterFramework` dependency to the iOS and macOS Swift packages, as required by Flutter's Swift Package Manager plugin migration guide
+* Migrates the web implementation from `dart:html` to `package:web` and `dart:js_interop`
+* Migrates the example iOS and macOS apps to Swift Package Manager
+
 ## 0.6.0
 
 * Updates the minimum supported SDK version to Flutter 3.44/Dart 3.12
